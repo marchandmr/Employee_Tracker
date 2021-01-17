@@ -73,6 +73,7 @@ function runSearch() {
         })
 }
 
+
 // function to add an employee to the database
 
 function addEmployee() {
@@ -104,8 +105,8 @@ function addEmployee() {
             }
         ])
         .then(function (data) {
-            var role = viewDepartment().indexOf(data.department) + 1
-            var manager = viewManager().indexOf(data.manager) + 1
+            var role = viewDepartment().indexOf(data.department + 1)
+            var manager = viewManager().indexOf(data.manager + 1)
             connection.query('INSERT INTO employee SET ?',
                 {
                     first_name: data.first_name,
@@ -202,7 +203,7 @@ function viewManager() {
 
 };
 function viewAllEmployees() {
-    connection.query("SELECT employee.first_name, employee.last_name, employee_role.title, employee_role.salary, department.name FROM employee INNER JOIN employee_role on employee_role.id = employee.role_id INNER JOIN department on department_id = employee_role.department_id", function (err, res) {
+    connection.query(" SELECT employee.id,employee.first_name, employee.last_name,employee_role.title, employee_role.salary,department.name FROM employee INNER JOIN employee_role on employee_role.id = employee.role_id inner join department ON employee_role.department_id = department.id", function (err, res) {
         if (err) throw err;
         // Log all results of the SELECT statement
         console.table(res);
@@ -234,7 +235,7 @@ function viewRoles() {
 
 };
 
-var managerArray = [];
+
 function viewManagers() {
     connection.query("SELECT first_name, last_name FROM employee WHERE manager_id IS NULL", function (err, res) {
         if (err) throw err;
@@ -248,3 +249,46 @@ function viewManagers() {
 
 
 };
+
+function updateEmployee() {
+    inquirer.prompt(
+
+        [
+
+            {
+                type: "list",
+                name: "empRole",
+                message: "choose employee to update",
+                choices: viewEmp()
+            }
+        ])
+        .then(function (data) {
+            connection.query('INSERT INTO department SET ?',
+                {
+                    name: data.name
+                })
+            console.table(data);
+            runSearch();
+        })
+};
+
+const empArray = [];
+function viewEmp() {
+
+    connection.query("SELECT first_name, last_name FROM employee", function (err, res) {
+        if (err) throw err;
+        // Log all results of the SELECT statement
+        for (var i = 0; i < res.length; i++) {
+            empArray.push(res[i].first_name.concat(" " + res[i].last_name))
+        }
+
+
+        return empArray;
+    })
+
+
+};
+
+
+
+
