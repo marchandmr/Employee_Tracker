@@ -8,6 +8,8 @@
 
   Link to demo: https://drive.google.com/file/d/1lu9hULFYp-IrvVVkIm9N7PttoVZ_jNlA/view?usp=sharing
   
+  ![](Assets/screenshot.png)
+  
   ## Table Of Contents
 
   * [Installation](#installation)
